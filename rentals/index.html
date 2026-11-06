@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rentals — Heimshtut</title>
+<meta name="description" content="List your rental in the Heimshtut, mailed free to every home in Kiryas Joel. Fill in the details, preview your listing, and continue to payment.">
+<meta name="theme-color" content="#681e3a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Rentals — Heimshtut">
+<meta property="og:description" content="List your rental in the Heimshtut, mailed free to every home in Kiryas Joel. Fill in the details, preview your listing, and continue to payment.">
+<meta property="og:image" content="https://www.heimshtut.com/og.png">
+<meta property="og:url" content="https://www.heimshtut.com/rentals/">
+<link rel="preload" href="../fonts/mont-800.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../styles.css?v=20261030chat">
+<link rel="icon" href="../img/favicon.png">
+<link rel="canonical" href="https://www.heimshtut.com/rentals/">
+<script src="../analytics.js" defer></script>
+<script src="../config.js?v=20261030chat" defer></script>
+<script src="../site.js?v=20261030chat" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap top-in">
+    <a href="../" class="brand" aria-label="Heimshtut home"><img src="../img/logo_light.png" alt="Heimshtut" width="132" height="52"></a>
+    <nav aria-label="Main">
+      <ul><li><a href="../#this-week">This Week</a></li><li><a href="../#archive">Archive</a></li><li><a href="../advertise/">Advertise</a></li><li><a href="../classifieds/">Classifieds</a></li><li><a href="../rentals/" aria-current="page">Rentals</a></li><li><a href="#contact">Contact</a></li></ul>
+    </nav>
+    <a class="btn btn-sm" href="tel:+18454148007">Call</a>
+  </div>
+  <nav class="mnav" aria-label="Sections">
+    <a href="../#this-week">This Week</a><a href="../#archive">Archive</a><a href="../advertise/">Advertise</a><a href="../classifieds/">Classifieds</a><a href="../rentals/" aria-current="page">Rentals</a><a href="#contact">Contact</a>
+  </nav>
+</header>
+<main id="main">
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">Rentals · <span lang="yi" dir="rtl">רענטלס</span></p>
+    <h1>List a rental</h1>
+    <p class="intro">Fill in the details, see your listing as it will look, then continue to payment.</p>
+    <p class="price-tag" data-price-tag="rental"><b class="pt-now">$45</b><small class="pt-note"> / month</small></p>
+    <p class="cancel-line" data-cancel-line>Billed monthly until you cancel. To cancel, call <a href="tel:+18454148007">845-414-8007</a> or email <a href="mailto:classifieds@heimshtut.com?subject=Cancel%20my%20rental%20listing">classifieds@heimshtut.com</a>.</p>
+    <p class="paid-banner" hidden>Thank you! Your payment went through. Listing number <b></b> — we will be in touch.</p>
+  </div>
+</section>
+<section class="section lst-sec">
+  <div class="wrap lst" id="place">
+    <form class="lst-form" data-listing="rental" novalidate>
+      <p class="eyebrow">Step 1 of 2 · Details</p>
+      <div class="row2">
+        <label class="fld"><span>Type of rental</span>
+          <select name="type" required>
+            <option value="">Choose…</option>
+            <option value="apartment">Apartment</option>
+            <option value="house">House</option>
+            <option value="basement">Basement apartment</option>
+            <option value="short">Short-term rental</option>
+            <option value="office">Office</option>
+            <option value="store">Store / commercial</option>
+            <option value="other">Other</option>
+          </select></label>
+        <label class="fld"><span>Rooms</span>
+          <select name="rooms" required>
+            <option value="">Choose…</option>
+            <option value="studio" data-label="Studio">Studio</option>
+            <option value="1" data-label="1 room">1</option>
+            <option value="2" data-label="2 rooms">2</option>
+            <option value="3" data-label="3 rooms">3</option>
+            <option value="4" data-label="4 rooms">4</option>
+            <option value="5" data-label="5 rooms">5</option>
+            <option value="6" data-label="6 rooms">6</option>
+            <option value="7" data-label="7 rooms">7</option>
+            <option value="8" data-label="8 rooms">8</option>
+            <option value="na" data-label="">Not a home (office / store)</option>
+          </select></label>
+      </div>
+      <label class="fld"><span>Address or area</span><input type="text" name="area" required maxlength="120" placeholder="e.g. Forest Rd, Kiryas Joel"></label>
+      <label class="fld"><span>Rent per month ($)</span><input type="number" name="rent" required min="1" step="1" inputmode="numeric" placeholder="e.g. 2400"></label>
+      <label class="fld"><span>Description</span><textarea name="description" required rows="4" maxlength="600" dir="auto" placeholder="Floor, size, what's included, available from…"></textarea></label>
+      <div class="row2">
+        <label class="fld"><span>Contact phone</span><input type="tel" name="phone" required autocomplete="tel" placeholder="845-…"></label>
+        <label class="fld"><span>Contact email <em>(optional)</em></span><input type="email" name="email" autocomplete="email"></label>
+      </div>
+      <label class="fld"><span>Contact name</span><input type="text" name="name" required maxlength="60" autocomplete="name" data-msg="Please enter a contact name."></label>
+      <label class="fld"><span>Photo <em>(optional)</em></span><input type="file" name="photo" accept="image/*"></label>
+      <button type="submit" class="btn">Continue to payment &#8594;</button>
+    </form>
+    <aside class="lst-prev" aria-label="Preview">
+      <p class="eyebrow">Live preview</p>
+      <div class="lp lp-rental" aria-live="polite"></div>
+    </aside>
+    <div class="lst-pay" hidden></div>
+  </div>
+</section>
+<section class="contact" id="contact">
+  <div class="wrap">
+    <h2>let's talk<span>.</span></h2>
+    <p class="tagline" lang="yi" dir="rtl">רופט אונז היינט</p>
+    <ul class="c-list">
+      <li><span>Call</span><a href="tel:+18454148007">845-414-8007</a></li>
+      <li><span>Advertising</span><a href="mailto:ads@heimshtut.com?subject=Place%20an%20ad%20in%20Heimshtut">ads@heimshtut.com</a></li>
+      <li><span>Classifieds</span><a href="mailto:classifieds@heimshtut.com?subject=Classified%20ad">classifieds@heimshtut.com</a> <em>or ext. 5</em></li>
+    </ul>
+  </div>
+</section>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <img src="../img/logo_dark.png" alt="Heimshtut" width="120" height="48" loading="lazy">
+    <p lang="yi" dir="rtl" class="foot-yi">קרית יואל'ס וועכענטליכע צייטונג</p>
+    <p>Heimshtut · Kiryas Joel, NY</p>
+    <p>© 2026 Heimshtut</p>
+  </div>
+</footer>
+</body>
+</html>
