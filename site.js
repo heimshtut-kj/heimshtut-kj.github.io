@@ -241,11 +241,11 @@
   root.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
   // Preserve any existing widget callbacks. Hiding the bubble does not disable Tawk AI.
   const api=window.Tawk_API;
-  if(api){const onLoad=api.onLoad;api.onLoad=function(...args){try{onLoad?.apply(this,args);}finally{hideTawk();}};const onMin=api.onChatMinimized;api.onChatMinimized=function(...args){try{onMin?.apply(this,args);}finally{hideTawk();}};hideTawk();}
+  if(api){const onMax=api.onChatMaximized;api.onChatMaximized=function(...args){try{onMax?.apply(this,args);}finally{$('launch').hidden=true;}};const onLoad=api.onLoad;api.onLoad=function(...args){try{onLoad?.apply(this,args);}finally{hideTawk();}};const onMin=api.onChatMinimized;api.onChatMinimized=function(...args){try{onMin?.apply(this,args);}finally{hideTawk();$('launch').hidden=false;}};hideTawk();}
   $('human').addEventListener('click',()=>{
     const api=window.Tawk_API;
     if(typeof api?.maximize!=='function'){$('status').textContent='Live chat is still loading or unavailable. Please call or email our team.';return;}
-    try{close();api.showWidget();api.maximize();}catch{$('launch').hidden=false;open();$('status').textContent='Could not open live chat. Please call or email our team.';}
+    try{close();$('launch').hidden=true;api.showWidget();api.maximize();}catch{$('launch').hidden=false;open();$('status').textContent='Could not open live chat. Please call or email our team.';}
   });
   $('form').addEventListener('submit',async e=>{
     e.preventDefault();const message=$('input').value.trim();if(!message)return;
