@@ -213,3 +213,53 @@
   s.src = "https://embed.tawk.to/" + p + "/" + w;
   (document.body || document.head).appendChild(s);
 })();
+
+
+// Review-only widget. Set endpoint to the verified Worker origin before enabling.
+// Load after site.js. Leave issue-reader pages unchanged.
+(() => {
+  'use strict';
+  const endpoint = 'https://plain-meadow-34a7.ads-3ce.workers.dev';
+  if (!endpoint || document.getElementById('heim-ai')) return;
+  try {if (new URL(endpoint).protocol !== 'https:') return;}catch{return;}
+  const css = document.createElement('style');
+  css.textContent = `#heim-ai{position:fixed;right:20px;bottom:20px;z-index:999990;font:15px/1.5 Arial,sans-serif;color:#302629}#heim-ai *{box-sizing:border-box}#heim-ai button,#heim-ai input{font:inherit}#heim-ai button{cursor:pointer}#heim-ai-launch,#heim-ai-send{background:#681e3a;color:#fff;border:0;border-radius:24px;padding:12px 20px;font-weight:700}#heim-ai-panel{width:370px;max-width:calc(100vw - 24px);background:#fffaf3;border:1px solid #d8c8cd;border-radius:18px;box-shadow:0 8px 40px #0003;overflow:hidden}#heim-ai [hidden]{display:none!important}#heim-ai-head{display:flex;align-items:center;justify-content:space-between;background:#681e3a;color:white;padding:14px 18px;font-weight:700}#heim-ai-close{color:white;background:none;border:0;font-size:25px;padding:0 5px}#heim-ai-body{padding:16px;max-height:min(46vh,340px);overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}#heim-ai-status{padding:0 16px;color:#66565b;font-size:13px}#heim-ai-form{display:flex;gap:8px;padding:10px 16px}#heim-ai-input{min-width:0;flex:1;border:1px solid #aa929c;border-radius:8px;padding:10px;background:white;color:#302629}#heim-ai-send{padding:10px 14px;border-radius:8px}#heim-ai-links{padding:0 16px;display:flex;gap:6px 14px;flex-wrap:wrap;font-size:13px}#heim-ai a{color:#681e3a;text-decoration:underline}#heim-ai-human{margin:12px 16px 4px;padding:10px;background:#fff;border:1px solid #681e3a;color:#681e3a;border-radius:8px;font-weight:700;width:calc(100% - 32px)}#heim-ai-note{font-size:11px;color:#66565b;padding:8px 16px 14px;margin:0}#heim-ai-contact{padding:0 16px;font-size:13px}#heim-ai button:focus-visible,#heim-ai input:focus-visible,#heim-ai a:focus-visible{outline:3px solid #da985a;outline-offset:2px}@media(max-width:480px){#heim-ai{right:12px;bottom:12px}#heim-ai-panel{width:calc(100vw - 24px)}}`;
+  document.head.appendChild(css);
+  const root=document.createElement('section');root.id='heim-ai';root.setAttribute('aria-label','Heimshtut assistant');
+  root.innerHTML='<button id="heim-ai-launch" aria-expanded="false" aria-controls="heim-ai-panel">Ask Heimshtut</button><section id="heim-ai-panel" aria-labelledby="heim-ai-title" hidden><header id="heim-ai-head"><span id="heim-ai-title">Heimshtut assistant</span><button id="heim-ai-close" aria-label="Close assistant">×</button></header><div id="heim-ai-body" dir="auto" role="log" aria-live="polite"></div><div id="heim-ai-status" role="status"></div><form id="heim-ai-form"><input id="heim-ai-input" dir="auto" aria-label="Your question" placeholder="Ask about Heimshtut…" maxlength="1200" autocomplete="off" required><button id="heim-ai-send" type="submit">Ask</button></form><nav id="heim-ai-links" aria-label="Official information"><a href="/advertise/">Ads</a><a href="/classifieds/">Classifieds</a><a href="/rentals/">Rentals</a><a href="/#this-week">This week</a></nav><button id="heim-ai-human" hidden>Talk to a live person</button><p id="heim-ai-contact" hidden><a href="tel:+18454148007">845-414-8007</a> · <a href="mailto:ads@heimshtut.com">Email us</a></p><p id="heim-ai-note">Each question is handled separately. Do not enter payment details or passwords.</p></section>';
+  document.body.appendChild(root);
+  const $=id=>document.getElementById('heim-ai-'+id);
+  const greeting="Hi! I can help with ads, classifieds, rentals, or finding this week's issue. What would you like help with?";
+  $('body').textContent=greeting;
+  let lastFocus=null;
+  function contact(show,human=false){$('human').hidden=!human;$('contact').hidden=!show;}
+  contact(false);
+  function hideTawk(){try{window.Tawk_API?.hideWidget?.();}catch{}}
+  function open(){lastFocus=document.activeElement;hideTawk();$('launch').hidden=true;$('launch').setAttribute('aria-expanded','true');$('panel').hidden=false;$('input').focus();}
+  function close(){ $('panel').hidden=true;$('launch').hidden=false;$('launch').setAttribute('aria-expanded','false');lastFocus?.focus?.();}
+  $('launch').addEventListener('click',open);$('close').addEventListener('click',close);
+  root.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+  // Preserve any existing widget callbacks. Hiding the bubble does not disable Tawk AI.
+  const api=window.Tawk_API;
+  if(api){const onLoad=api.onLoad;api.onLoad=function(...args){try{onLoad?.apply(this,args);}finally{hideTawk();}};const onMin=api.onChatMinimized;api.onChatMinimized=function(...args){try{onMin?.apply(this,args);}finally{hideTawk();}};hideTawk();}
+  $('human').addEventListener('click',()=>{
+    const api=window.Tawk_API;
+    if(typeof api?.maximize!=='function'){$('status').textContent='Live chat is still loading or unavailable. Please call or email our team.';return;}
+    try{close();api.showWidget();api.maximize();}catch{$('launch').hidden=false;open();$('status').textContent='Could not open live chat. Please call or email our team.';}
+  });
+  $('form').addEventListener('submit',async e=>{
+    e.preventDefault();const message=$('input').value.trim();if(!message)return;
+    $('send').disabled=true;$('input').disabled=true;$('status').textContent='Thinking…';contact(false);
+    $('body').textContent='You: '+message+'\n\n';
+    const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),25000);
+    try{
+      const res=await fetch(new URL('/chat',endpoint),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message}),signal:controller.signal,credentials:'omit'});
+      const data=await res.json();
+      if(typeof data.reply!=='string')throw Error('invalid');
+      // Never insert model text as HTML or interpret model-supplied links.
+      $('body').textContent='You: '+message+'\n\nAssistant: '+data.reply;
+      $('input').value='';contact(Boolean(data.handoff||data.contact),Boolean(data.handoff));$('status').textContent=data.handoff?'Contact options are below.':'';
+    }catch{$('body').textContent='The assistant is unavailable right now. Please call 845-414-8007 or email our team.';contact(true);$('status').textContent='';}
+    finally{clearTimeout(timer);$('send').disabled=false;$('input').disabled=false;if(!$('panel').hidden)$('input').focus();}
+  });
+})();
